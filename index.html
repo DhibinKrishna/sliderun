@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SlideRun</title>
+    <style>
+      .square {
+        width: 6.25rem;
+        height: 6.25rem;
+        font-size: 25px;
+        font-weight: 600;
+      }
+    </style>
+    <script language="javascript" type="text/javascript">
+      let count_ = 0;
+      let success_ = false;
+      let next_ = 0;
+      let previous_ = 0;
+      let bottom_ = 0;
+      let top_ = 0;
+      let noOfChecks_ = 0;
+      let noOfChanges_ = 0;
+      let present_ = 0;
+      let possible_ = 0;
+      let east_ = 0;
+      let west_ = 0;
+      let north_ = 0;
+      let south_ = 0;
+
+      function clicked(current) {
+        if (success_ == true) {
+          // Automatically shuffles after success
+          shuffle();
+          success_ = false;
+        } else {
+          next_ = current + 1;
+          previous_ = current - 1;
+          bottom_ = current + 4;
+          top_ = current - 4;
+
+          if (next_ < 17) {
+            noOfChecks_ = (4 - (current % 4)) % 4; // No of squares right to the current
+            noOfChanges_ = 0; // No of squares to reach the blank to the right
+
+            for (i = 1; i < noOfChecks_ + 1; i++) {
+              if (document.getElementById(current + i).value == "") {
+                noOfChanges_ = i;
+              }
+            }
+
+            for (i = noOfChanges_; i > 0; i--) {
+              document.getElementById(current + i).value =
+                document.getElementById(current + i - 1).value;
+            }
+
+            if (noOfChanges_ > 0) {
+              document.getElementById(current).value = "";
+              document.getElementById(current).style.display = "none";
+              document.getElementById(current + noOfChanges_).style.display =
+                "block";
+              count_++;
+            }
+          }
+
+          if (previous_ > 0) {
+            noOfChecks_ = 3 - ((4 - (current % 4)) % 4); // No or squares left to the current
+            noOfChanges_ = 0; // No of squares to reach the blank to the left
+
+            for (i = 1; i < noOfChecks_ + 1; i++) {
+              if (document.getElementById(current - i).value == "") {
+                noOfChanges_ = i;
+              }
+            }
+
+            for (i = noOfChanges_; i > 0; i--) {
+              document.getElementById(current - i).value =
+                document.getElementById(current - i + 1).value;
+            }
+
+            if (noOfChanges_ > 0) {
+              document.getElementById(current).value = "";
+              document.getElementById(current).style.display = "none";
+              document.getElementById(current - noOfChanges_).style.display =
+                "block";
+              count_++;
+            }
+          }
+
+          if (bottom_ < 17) {
+            noOfChecks_ = (4 - Math.ceil(current / 4)) % 4;
+            noOfChanges_ = 0;
+
+            for (i = 1; i < noOfChecks_ + 1; i++) {
+              if (document.getElementById(current + 4 * i).value == "") {
+                noOfChanges_ = i;
+              }
+            }
+
+            for (i = noOfChanges_; i > 0; i--) {
+              document.getElementById(current + 4 * i).value =
+                document.getElementById(current + 4 * (i - 1)).value;
+            }
+
+            if (noOfChanges_ > 0) {
+              document.getElementById(current).value = "";
+              document.getElementById(current).style.display = "none";
+              document.getElementById(
+                current + 4 * noOfChanges_
+              ).style.display = "block";
+              count_++;
+            }
+          }
+
+          if (top_ > 0) {
+            noOfChecks_ = 3 - ((4 - Math.ceil(current / 4)) % 4);
+            noOfChanges_ = 0;
+
+            for (i = 1; i < noOfChecks_ + 1; i++) {
+              if (document.getElementById(current - 4 * i).value == "") {
+                noOfChanges_ = i;
+              }
+            }
+
+            for (i = noOfChanges_; i > 0; i--) {
+              document.getElementById(current - 4 * i).value =
+                document.getElementById(current - 4 * (i - 1)).value;
+            }
+
+            if (noOfChanges_ > 0) {
+              document.getElementById(current).value = "";
+              document.getElementById(current).style.display = "none";
+              document.getElementById(
+                current - 4 * noOfChanges_
+              ).style.display = "block";
+              count_++;
+            }
+          }
+
+          let flag = true;
+          for (i = 1; i < 16; i++) {
+            if (document.getElementById(i).value == i) {
+              flag = true;
+            } else {
+              flag = false;
+              break;
+            }
+          }
+
+          document.getElementById("count_").innerHTML = count_;
+          if (flag == true) {
+            setTimeout(function () {
+              alert("Success!");
+              success_ = true;
+            }, 300);
+          }
+
+          assignColor();
+        }
+      }
+
+      function shuffle() {
+        reset();
+
+        /*for(i = 0; i < 100; i++){
+				rand1 = Math.ceil(15*Math.random());
+				rand2 = Math.ceil(15*Math.random());
+	
+				let temp = document.getElementById(rand1).value;
+				document.getElementById(rand1).value = document.getElementById(rand2).value;
+				document.getElementById(rand2).value = temp;
+			}*/
+
+        present_ = 16;
+        for (i = 0; i < 1000; i++) {
+          news = Math.ceil(4 * Math.random()); // NEWS - direction
+          //news = 2;
+          if (news === 1) {
+            possible_ = (4 - (present_ % 4)) % 4;
+            if (possible_ > 0) {
+              east_ = present_ + 1;
+
+              document.getElementById(present_).value =
+                document.getElementById(east_).value;
+              document.getElementById(east_).value = "";
+              //document.getElementById(present_).style.display = "block";
+              //document.getElementById(east_).style.display = "none";
+              present_ = east_;
+            }
+          }
+          if (news === 2) {
+            possible_ = 3 - ((4 - (present_ % 4)) % 4);
+            if (possible_ > 0) {
+              west_ = present_ - 1;
+
+              document.getElementById(present_).value =
+                document.getElementById(west_).value;
+              document.getElementById(west_).value = "";
+              //document.getElementById(present_).style.display = "block";
+              //document.getElementById(west_).style.display = "none";
+              present_ = west_;
+            }
+          }
+          if (news === 3) {
+            possible_ = (4 - Math.ceil(present_ / 4)) % 4;
+            if (possible_ > 0) {
+              south_ = present_ + 4;
+
+              document.getElementById(present_).value =
+                document.getElementById(south_).value;
+              document.getElementById(south_).value = "";
+              //document.getElementById(present_).style.display = "block";
+              //document.getElementById(south_).style.display = "none";
+              present_ = south_;
+            }
+          }
+          if (news === 4) {
+            possible_ = 3 - ((4 - Math.ceil(present_ / 4)) % 4);
+            if (possible_ > 0) {
+              north_ = present_ - 4;
+
+              document.getElementById(present_).value =
+                document.getElementById(north_).value;
+              document.getElementById(north_).value = "";
+              //document.getElementById(present_).style.display = "block";
+              //document.getElementById(north_).style.display = "none";
+              present_ = north_;
+            }
+          }
+          if (i > 200 && present_ === 16) {
+            break;
+          } //Last block is left blank after shuffling
+        }
+
+        success_ = false; //If shuffled button clicked after success, it prevents automatic reshuffling on clicking on a block
+        assignColor();
+      }
+
+      function assignColor() {
+        for (i = 1; i < 17; i++) {
+          if (document.getElementById(i).value == i) {
+            document.getElementById(i).style.color = "yellowgreen";
+          } else {
+            document.getElementById(i).style.color = "grey";
+          }
+        }
+      }
+
+      function reset() {
+        //Resetting the positions of the blocks
+        for (i = 1; i < 16; i++) {
+          document.getElementById(i).value = i;
+          document.getElementById(i).style.display = "block";
+        }
+        document.getElementById(16).value = "";
+        document.getElementById(16).style.display = "none";
+
+        count_ = 0;
+        document.getElementById("count_").innerHTML = "";
+      }
+    </script>
+  </head>
+
+  <body bgcolor="teal" onload="shuffle()">
+    <br /><br /><br />
+
+    <table border="0" align="center">
+      <tr>
+        <td>
+          <input
+            type="button"
+            id="1"
+            value="1"
+            onclick="clicked(1)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="2"
+            value="2"
+            onclick="clicked(2)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="3"
+            value="3"
+            onclick="clicked(3)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="4"
+            value="4"
+            onclick="clicked(4)"
+            class="square"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input
+            type="button"
+            id="5"
+            value="5"
+            onclick="clicked(5)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="6"
+            value="6"
+            onclick="clicked(6)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="7"
+            value="7"
+            onclick="clicked(7)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="8"
+            value="8"
+            onclick="clicked(8)"
+            class="square"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input
+            type="button"
+            id="9"
+            value="9"
+            onclick="clicked(9)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="10"
+            value="10"
+            onclick="clicked(10)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="11"
+            value="11"
+            onclick="clicked(11)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="12"
+            value="12"
+            onclick="clicked(12)"
+            class="square"
+          />
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <input
+            type="button"
+            id="13"
+            value="13"
+            onclick="clicked(13)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="14"
+            value="14"
+            onclick="clicked(14)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="15"
+            value="15"
+            onclick="clicked(15)"
+            class="square"
+          />
+        </td>
+        <td>
+          <input
+            type="button"
+            id="16"
+            value=""
+            onclick="clicked(16)"
+            class="square"
+            style="display: none"
+          />
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>
+          <input type="button" value="Shuffle" onClick="shuffle()" />
+        </td>
+        <td>
+          <div align="right" id="count_" onClick="reset()"></div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
