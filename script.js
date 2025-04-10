@@ -1,6 +1,5 @@
 let _count = 0;
 let _success = false;
-let noOfSquaresToBlank = 0;
 
 /*
  * Move the squares on click
@@ -191,8 +190,6 @@ function shuffle() {
         document.getElementById(current).innerHTML =
           document.getElementById(east).innerHTML;
         document.getElementById(east).innerHTML = "";
-        //document.getElementById(present_).style.visibility = "visible";
-        //document.getElementById(east_).style.visibility = "hidden";
         current = east;
       }
     } else if (news === 2) {
@@ -203,8 +200,6 @@ function shuffle() {
         document.getElementById(current).innerHTML =
           document.getElementById(west).innerHTML;
         document.getElementById(west).innerHTML = "";
-        //document.getElementById(present_).style.visibility = "visible";
-        //document.getElementById(west_).style.visibility = "hidden";
         current = west;
       }
     } else if (news === 3) {
@@ -215,8 +210,6 @@ function shuffle() {
         document.getElementById(current).innerHTML =
           document.getElementById(south).innerHTML;
         document.getElementById(south).innerHTML = "";
-        //document.getElementById(present_).style.visibility = "visible";
-        //document.getElementById(south_).style.visibility = "hidden";
         current = south;
       }
     } else if (news === 4) {
@@ -227,8 +220,6 @@ function shuffle() {
         document.getElementById(current).innerHTML =
           document.getElementById(_north).innerHTML;
         document.getElementById(_north).innerHTML = "";
-        //document.getElementById(present_).style.visibility = "visible";
-        //document.getElementById(north_).style.visibility = "hidden";
         current = _north;
       }
     }
