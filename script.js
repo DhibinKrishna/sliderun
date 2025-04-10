@@ -1,7 +1,13 @@
 let _count = 0;
 let _success = false;
-let _noOfSquaresToBlank = 0;
+let noOfSquaresToBlank = 0;
 
+/*
+ * Move the squares on click
+ * Update click count
+ * Update colors
+ * Show success if completed
+ */
 function clicked(current) {
   if (_success == true) {
     // Automatically shuffles after success
@@ -17,27 +23,26 @@ function clicked(current) {
     // Right
     if (right < 17) {
       let offsetSquares = (4 - (current % 4)) % 4; // No of squares right to the current one
-      _noOfSquaresToBlank = 0; // No of squares to reach the blank square to the right
+      let noOfSquaresToBlank = 0; // No of squares to reach the blank square to the right
 
       for (i = 1; i <= offsetSquares; i++) {
         if (document.getElementById(current + i).innerHTML == "") {
-          _noOfSquaresToBlank = i;
+          noOfSquaresToBlank = i;
           break;
         }
       }
 
-      for (i = _noOfSquaresToBlank; i > 0; i--) {
+      for (i = noOfSquaresToBlank; i > 0; i--) {
         document.getElementById(current + i).innerHTML =
           document.getElementById(current + i - 1).innerHTML;
       }
 
-      if (_noOfSquaresToBlank > 0) {
+      if (noOfSquaresToBlank > 0) {
         isSquaresTransferred = true;
         document.getElementById(current).innerHTML = "";
         document.getElementById(current).style.visibility = "hidden";
-        document.getElementById(
-          current + _noOfSquaresToBlank
-        ).style.visibility = "visible";
+        document.getElementById(current + noOfSquaresToBlank).style.visibility =
+          "visible";
         _count++;
       }
     }
@@ -45,27 +50,26 @@ function clicked(current) {
     // Left
     if (!isSquaresTransferred && left > 0) {
       let offsetSquares = 3 - ((4 - (current % 4)) % 4); // No or squares left to the current one
-      _noOfSquaresToBlank = 0;
+      let noOfSquaresToBlank = 0;
 
       for (i = 1; i <= offsetSquares; i++) {
         if (document.getElementById(current - i).innerHTML == "") {
-          _noOfSquaresToBlank = i;
+          noOfSquaresToBlank = i;
           break;
         }
       }
 
-      for (i = _noOfSquaresToBlank; i > 0; i--) {
+      for (i = noOfSquaresToBlank; i > 0; i--) {
         document.getElementById(current - i).innerHTML =
           document.getElementById(current - i + 1).innerHTML;
       }
 
-      if (_noOfSquaresToBlank > 0) {
+      if (noOfSquaresToBlank > 0) {
         isSquaresTransferred = true;
         document.getElementById(current).innerHTML = "";
         document.getElementById(current).style.visibility = "hidden";
-        document.getElementById(
-          current - _noOfSquaresToBlank
-        ).style.visibility = "visible";
+        document.getElementById(current - noOfSquaresToBlank).style.visibility =
+          "visible";
         _count++;
       }
     }
@@ -73,26 +77,26 @@ function clicked(current) {
     // Bottom
     if (!isSquaresTransferred && bottom < 17) {
       let offsetSquares = 4 - Math.ceil(current / 4);
-      _noOfSquaresToBlank = 0;
+      let noOfSquaresToBlank = 0;
 
       for (i = 1; i < offsetSquares + 1; i++) {
         if (document.getElementById(current + 4 * i).innerHTML == "") {
-          _noOfSquaresToBlank = i;
+          noOfSquaresToBlank = i;
           break;
         }
       }
 
-      for (i = _noOfSquaresToBlank; i > 0; i--) {
+      for (i = noOfSquaresToBlank; i > 0; i--) {
         document.getElementById(current + 4 * i).innerHTML =
           document.getElementById(current + 4 * (i - 1)).innerHTML;
       }
 
-      if (_noOfSquaresToBlank > 0) {
+      if (noOfSquaresToBlank > 0) {
         isSquaresTransferred = true;
         document.getElementById(current).innerHTML = "";
         document.getElementById(current).style.visibility = "hidden";
         document.getElementById(
-          current + 4 * _noOfSquaresToBlank
+          current + 4 * noOfSquaresToBlank
         ).style.visibility = "visible";
         _count++;
       }
@@ -101,26 +105,26 @@ function clicked(current) {
     // Top
     if (!isSquaresTransferred && top > 0) {
       let offsetSquares = Math.ceil(current / 4) - 1; // No of squares above the current one
-      _noOfSquaresToBlank = 0;
+      let noOfSquaresToBlank = 0;
 
       for (i = 1; i < offsetSquares + 1; i++) {
         if (document.getElementById(current - 4 * i).innerHTML == "") {
-          _noOfSquaresToBlank = i;
+          noOfSquaresToBlank = i;
           break;
         }
       }
 
-      for (i = _noOfSquaresToBlank; i > 0; i--) {
+      for (i = noOfSquaresToBlank; i > 0; i--) {
         document.getElementById(current - 4 * i).innerHTML =
           document.getElementById(current - 4 * (i - 1)).innerHTML;
       }
 
-      if (_noOfSquaresToBlank > 0) {
+      if (noOfSquaresToBlank > 0) {
         isSquaresTransferred = true;
         document.getElementById(current).innerHTML = "";
         document.getElementById(current).style.visibility = "hidden";
         document.getElementById(
-          current - 4 * _noOfSquaresToBlank
+          current - 4 * noOfSquaresToBlank
         ).style.visibility = "visible";
         _count++;
       }
@@ -144,7 +148,11 @@ function clicked(current) {
     document.getElementById("count").innerHTML = _count;
     if (flag == true) {
       setTimeout(function () {
-        alert("Success!");
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
         _success = true;
       }, 300);
     }
@@ -152,10 +160,10 @@ function clicked(current) {
 }
 
 /*
-/* Move the blank square randomly to neighbouring squares - Up/Down/Left/Right
-/* Following this approach for ease of solving the squares
-/* Starting from blank square at 16
-*/
+ * Move the blank square randomly to neighbouring squares - Up/Down/Left/Right
+ * Following this approach for ease of solving the squares
+ * Starting from blank square at 16
+ */
 function shuffle() {
   reset();
 
@@ -231,8 +239,26 @@ function shuffle() {
 
   _success = false; //If shuffled button clicked after success, it prevents automatic reshuffling on clicking on a block
   assignColor();
+
+  /*
+   * Resetting the positions of the blocks
+   */
+  function reset() {
+    for (i = 1; i < 16; i++) {
+      document.getElementById(i).innerHTML = i;
+      document.getElementById(i).style.visibility = "visible";
+    }
+    document.getElementById(16).innerHTML = "";
+    document.getElementById(16).style.visibility = "hidden";
+
+    _count = 0;
+    document.getElementById("count").innerHTML = "";
+  }
 }
 
+/*
+ * Marking the solved squares and next pick
+ */
 function assignColor() {
   let maxSolved = 0;
   for (i = 1; i < 17; i++) {
@@ -254,17 +280,4 @@ function assignColor() {
       }
     }
   }
-}
-
-function reset() {
-  //Resetting the positions of the blocks
-  for (i = 1; i < 16; i++) {
-    document.getElementById(i).innerHTML = i;
-    document.getElementById(i).style.visibility = "visible";
-  }
-  document.getElementById(16).innerHTML = "";
-  document.getElementById(16).style.visibility = "hidden";
-
-  _count = 0;
-  document.getElementById("count").innerHTML = "";
 }
