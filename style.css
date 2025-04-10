@@ -17,7 +17,6 @@ body {
 
 .container > div {
   background-color: lightgray;
-  padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
@@ -32,13 +31,11 @@ body {
 }
 
 .footer {
-  max-height: 10vh;
   margin: 0 auto;
+  margin-top: 5vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
 }
 
 @media (max-aspect-ratio: 1/2) {
@@ -51,6 +48,7 @@ body {
     max-height: 90vw; /* vw */
   }
 }
+
 @media (min-aspect-ratio: 1/2) and (max-aspect-ratio: 3/4) {
   .header {
     height: 15vh;
@@ -81,7 +79,7 @@ body {
 @media (min-aspect-ratio: 4/3) {
   /* Adjust height for wider screens */
   .header {
-    height: 2vh;
+    height: 0;
   }
   .container {
     max-width: 80vw;
@@ -110,6 +108,9 @@ body {
 }
 
 .count {
+  position: fixed;
+  bottom: 0;
+  right: 0;
   width: 4rem;
   height: 4rem;
   font-size: 1.1rem;
