@@ -4,23 +4,14 @@ body {
   font-family: Arial, sans-serif;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-}
-
 .container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 1rem;
-  max-width: 90vw;
-  max-height: 90vh;
-  margin: 0 auto;
+  max-width: 85vw;
+  max-height: 85vh;
   aspect-ratio: 1;
+  margin: 0 auto;
   margin-top: 1rem;
 }
 
@@ -41,13 +32,61 @@ body {
 }
 
 .footer {
-  height: 5vh;
-  max-width: 90vw;
+  max-height: 10vh;
   margin: 0 auto;
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin-top: 1rem;
+}
+
+@media (max-aspect-ratio: 1/2) {
+  /* Adjust height for taller screens */
+  .header {
+    height: 20vh;
+  }
+  .container {
+    max-width: 90vw;
+    max-height: 90vw; /* vw */
+  }
+}
+@media (min-aspect-ratio: 1/2) and (max-aspect-ratio: 3/4) {
+  .header {
+    height: 15vh;
+  }
+  .container {
+    max-width: 90vw;
+    max-height: 90vw; /* vw */
+  }
+}
+@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 1/1) {
+  .header {
+    height: 8vh;
+  }
+  .container {
+    max-width: 75vw;
+    max-height: 75vh;
+  }
+}
+@media (min-aspect-ratio: 1/1) and (max-aspect-ratio: 4/3) {
+  .header {
+    height: 5vh;
+  }
+  .container {
+    max-width: 75vw;
+    max-height: 75vh;
+  }
+}
+@media (min-aspect-ratio: 4/3) {
+  /* Adjust height for wider screens */
+  .header {
+    height: 2vh;
+  }
+  .container {
+    max-width: 80vw;
+    max-height: 80vh;
+  }
 }
 
 .button-outline {
@@ -72,7 +111,11 @@ body {
 
 .count {
   width: 4rem;
+  height: 4rem;
   font-size: 1.1rem;
   color: lightgray;
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
