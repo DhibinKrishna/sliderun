@@ -6,6 +6,7 @@
     <title>SlideRun</title>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   </head>
 
   <body onload="shuffle()">
@@ -28,7 +29,7 @@
       <div id="16" onclick="clicked(16)" style="visibility: hidden">16</div>
     </div>
     <div class="footer">
-      <div id="count" class="count" onclick="reset()"></div>
+      <div id="count" class="count"></div>
       <div>
         <button class="button-outline" onclick="shuffle()">Restart</button>
       </div>
