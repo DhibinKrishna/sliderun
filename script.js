@@ -1,274 +1,292 @@
+const _size = 4;
+const _maxShuffleRunThreshold = 50;
+const _squares = new Array(_size);
+let _blankSquare = [];
 let _count = 0;
 let _success = false;
 
-/*
- * Move the squares on click
- * Update click count
- * Update colors
- * Show success if completed
- */
-function clicked(current) {
+document.addEventListener("DOMContentLoaded", () => {
+  setGridTemplateColumns();
+});
+
+const initialize = () => {
+  for (let i = 0; i < _size; i++) {
+    _squares[i] = new Array(_size).fill(0);
+  }
+  for (let i = 0; i < _size; i++) {
+    for (let j = 0; j < _size; j++) {
+      _squares[i][j] = {
+        id: i * _size + j + 1,
+        value: i * _size + j + 1,
+        isModified: false,
+      };
+    }
+  }
+  resetLastSquare();
+  createSquares();
+};
+
+const createSquares = () => {
+  const container = document.getElementById("container");
+  container.innerHTML = ""; // Clear any existing content in the container
+
+  for (let i = 0; i < _size; i++) {
+    for (let j = 0; j < _size; j++) {
+      const square = document.createElement("div");
+      square.id = _squares[i][j].id;
+      square.innerHTML = _squares[i][j].value;
+      square.setAttribute("onclick", `clicked(${i},${j})`);
+
+      // Hide the last square (blank square)
+      if (_squares[i][j].value === "") {
+        square.style.visibility = "hidden";
+      }
+
+      // Append the square to the container
+      container.appendChild(square);
+    }
+  }
+};
+
+const onLoad = () => {
+  initialize();
+  shuffle();
+  render();
+};
+
+const setGridTemplateColumns = () => {
+  const container = document.getElementById("container");
+  container.style.gridTemplateColumns = `repeat(${_size}, 1fr)`;
+};
+
+const clicked = (i, j) => {
   if (_success == true) {
     // Automatically shuffles after success
-    shuffle();
     _success = false;
+    shuffle();
+    render();
   } else {
-    let right = current + 1;
-    let left = current - 1;
-    let bottom = current + 4;
-    let top = current - 4;
-    let isSquaresTransferred = false;
+    const clickedCellIndex = [i, j];
 
-    // Right
-    if (right < 17) {
-      let offsetSquares = (4 - (current % 4)) % 4; // No of squares right to the current one
-      let noOfSquaresToBlank = 0; // No of squares to reach the blank square to the right
-
-      for (i = 1; i <= offsetSquares; i++) {
-        if (document.getElementById(current + i).innerHTML == "") {
-          noOfSquaresToBlank = i;
-          break;
-        }
+    // Check if the row has blank square
+    if (clickedCellIndex[0] === _blankSquare[0]) {
+      // Right
+      if (_blankSquare[1] > clickedCellIndex[1]) {
+        shift(clickedCellIndex, _blankSquare, "right");
+        _blankSquare = clickedCellIndex;
       }
-
-      for (i = noOfSquaresToBlank; i > 0; i--) {
-        document.getElementById(current + i).innerHTML =
-          document.getElementById(current + i - 1).innerHTML;
+      // Left
+      else {
+        shift(clickedCellIndex, _blankSquare, "left");
+        _blankSquare = clickedCellIndex;
       }
-
-      if (noOfSquaresToBlank > 0) {
-        isSquaresTransferred = true;
-        document.getElementById(current).innerHTML = "";
-        document.getElementById(current).style.visibility = "hidden";
-        document.getElementById(current + noOfSquaresToBlank).style.visibility =
-          "visible";
-        _count++;
+      _count++;
+      render();
+      // Check if the column has blank square
+    } else if (clickedCellIndex[1] === _blankSquare[1]) {
+      // Down
+      if (_blankSquare[0] > clickedCellIndex[0]) {
+        shift(clickedCellIndex, _blankSquare, "down");
+        _blankSquare = clickedCellIndex;
       }
-    }
-
-    // Left
-    if (!isSquaresTransferred && left > 0) {
-      let offsetSquares = 3 - ((4 - (current % 4)) % 4); // No or squares left to the current one
-      let noOfSquaresToBlank = 0;
-
-      for (i = 1; i <= offsetSquares; i++) {
-        if (document.getElementById(current - i).innerHTML == "") {
-          noOfSquaresToBlank = i;
-          break;
-        }
+      // Up
+      else {
+        shift(clickedCellIndex, _blankSquare, "up");
+        _blankSquare = clickedCellIndex;
       }
-
-      for (i = noOfSquaresToBlank; i > 0; i--) {
-        document.getElementById(current - i).innerHTML =
-          document.getElementById(current - i + 1).innerHTML;
-      }
-
-      if (noOfSquaresToBlank > 0) {
-        isSquaresTransferred = true;
-        document.getElementById(current).innerHTML = "";
-        document.getElementById(current).style.visibility = "hidden";
-        document.getElementById(current - noOfSquaresToBlank).style.visibility =
-          "visible";
-        _count++;
-      }
-    }
-
-    // Bottom
-    if (!isSquaresTransferred && bottom < 17) {
-      let offsetSquares = 4 - Math.ceil(current / 4);
-      let noOfSquaresToBlank = 0;
-
-      for (i = 1; i < offsetSquares + 1; i++) {
-        if (document.getElementById(current + 4 * i).innerHTML == "") {
-          noOfSquaresToBlank = i;
-          break;
-        }
-      }
-
-      for (i = noOfSquaresToBlank; i > 0; i--) {
-        document.getElementById(current + 4 * i).innerHTML =
-          document.getElementById(current + 4 * (i - 1)).innerHTML;
-      }
-
-      if (noOfSquaresToBlank > 0) {
-        isSquaresTransferred = true;
-        document.getElementById(current).innerHTML = "";
-        document.getElementById(current).style.visibility = "hidden";
-        document.getElementById(
-          current + 4 * noOfSquaresToBlank
-        ).style.visibility = "visible";
-        _count++;
-      }
-    }
-
-    // Top
-    if (!isSquaresTransferred && top > 0) {
-      let offsetSquares = Math.ceil(current / 4) - 1; // No of squares above the current one
-      let noOfSquaresToBlank = 0;
-
-      for (i = 1; i < offsetSquares + 1; i++) {
-        if (document.getElementById(current - 4 * i).innerHTML == "") {
-          noOfSquaresToBlank = i;
-          break;
-        }
-      }
-
-      for (i = noOfSquaresToBlank; i > 0; i--) {
-        document.getElementById(current - 4 * i).innerHTML =
-          document.getElementById(current - 4 * (i - 1)).innerHTML;
-      }
-
-      if (noOfSquaresToBlank > 0) {
-        isSquaresTransferred = true;
-        document.getElementById(current).innerHTML = "";
-        document.getElementById(current).style.visibility = "hidden";
-        document.getElementById(
-          current - 4 * noOfSquaresToBlank
-        ).style.visibility = "visible";
-        _count++;
-      }
-    }
-
-    checkForSuccess();
-    assignColor();
-  }
-
-  function checkForSuccess() {
-    let flag = true;
-    for (i = 1; i < 16; i++) {
-      if (document.getElementById(i).innerHTML == i) {
-        flag = true;
-      } else {
-        flag = false;
-        break;
-      }
-    }
-
-    document.getElementById("count").innerHTML = _count;
-    if (flag == true) {
-      setTimeout(function () {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
-        _success = true;
-      }, 300);
+      _count++;
+      render();
     }
   }
-}
+};
+
+/*
+ * Blank cell travels opposite to 'direction'
+ */
+const shift = (fromCellIndex, toCellIndex, direction) => {
+  const length = Math.abs(
+    fromCellIndex[0] - toCellIndex[0] + fromCellIndex[1] - toCellIndex[1]
+  );
+
+  if (direction === "right") {
+    for (let i = 0; i < length; i++) {
+      swapCells(
+        [toCellIndex[0], toCellIndex[1] - i],
+        [toCellIndex[0], toCellIndex[1] - i - 1]
+      );
+    }
+  } else if (direction === "left") {
+    for (let i = 0; i < length; i++) {
+      swapCells(
+        [toCellIndex[0], toCellIndex[1] + i],
+        [toCellIndex[0], toCellIndex[1] + i + 1]
+      );
+    }
+  } else if (direction === "down") {
+    for (let i = 0; i < length; i++) {
+      swapCells(
+        [toCellIndex[0] - i, toCellIndex[1]],
+        [toCellIndex[0] - i - 1, toCellIndex[1]]
+      );
+    }
+  } else if (direction === "up") {
+    for (let i = 0; i < length; i++) {
+      swapCells(
+        [toCellIndex[0] + i, toCellIndex[1]],
+        [toCellIndex[0] + i + 1, toCellIndex[1]]
+      );
+    }
+  }
+};
 
 /*
  * Move the blank square randomly to neighbouring squares - Up/Down/Left/Right
  * Following this approach for ease of solving the squares
  * Starting from blank square at 16
  */
-function shuffle() {
+const shuffle = () => {
   reset();
+  let blankCellIndex = _blankSquare; // Run the blank cell around
+  const maxShuffleRun =
+    _size < 4 ? 50 : Math.abs(_size - 2) * _maxShuffleRunThreshold;
+  console.log(maxShuffleRun);
+  let i = 0;
 
-  /*
-  Below random swapping of blocks is not used as it can lead to tricky squares to solve
-  for(i = 0; i < 100; i++){
-    rand1 = Math.ceil(15*Math.random());
-    rand2 = Math.ceil(15*Math.random());
-
-    let temp = document.getElementById(rand1).innerHTML;
-    document.getElementById(rand1).innerHTML = document.getElementById(rand2).innerHTML;
-    document.getElementById(rand2).innerHTML = temp;
-  }
-  */
-
-  let current = 16; // Blank square
-  for (i = 0; i < 1000; i++) {
+  // Run until it finds the blank cell in the last position after 100 iterations
+  while (
+    i < maxShuffleRun ||
+    (i >= maxShuffleRun &&
+      (blankCellIndex[0] !== _size - 1 || blankCellIndex[1] !== _size - 1))
+  ) {
+    i++;
     news = Math.ceil(4 * Math.random()); // NEWS - direction
 
+    // Go Right
     if (news === 1) {
-      // Go Right
-      if ((4 - (current % 4)) % 4 > 0) {
-        let east = current + 1;
-
-        document.getElementById(current).innerHTML =
-          document.getElementById(east).innerHTML;
-        document.getElementById(east).innerHTML = "";
-        current = east;
-      }
-    } else if (news === 2) {
-      // Go Left
-      if (3 - ((4 - (current % 4)) % 4) > 0) {
-        let west = current - 1;
-
-        document.getElementById(current).innerHTML =
-          document.getElementById(west).innerHTML;
-        document.getElementById(west).innerHTML = "";
-        current = west;
-      }
-    } else if (news === 3) {
-      // Go Down
-      if (4 - Math.ceil(current / 4) > 0) {
-        let south = current + 4;
-
-        document.getElementById(current).innerHTML =
-          document.getElementById(south).innerHTML;
-        document.getElementById(south).innerHTML = "";
-        current = south;
-      }
-    } else if (news === 4) {
-      // Go Up
-      if (Math.ceil(current / 4) - 1 > 0) {
-        let _north = current - 4;
-
-        document.getElementById(current).innerHTML =
-          document.getElementById(_north).innerHTML;
-        document.getElementById(_north).innerHTML = "";
-        current = _north;
+      if (blankCellIndex[1] + 1 < _size) {
+        // If squares available to the right
+        const rightCellIndex = [blankCellIndex[0], blankCellIndex[1] + 1];
+        swapCells(blankCellIndex, rightCellIndex);
+        blankCellIndex = rightCellIndex;
       }
     }
-    if (i > 200 && current === 16) {
-      break;
-    } //Last block is left blank after shuffling
+
+    // Go Left
+    else if (news === 2) {
+      if (blankCellIndex[1] - 1 >= 0) {
+        const leftCellIndex = [blankCellIndex[0], blankCellIndex[1] - 1];
+        swapCells(blankCellIndex, leftCellIndex);
+        blankCellIndex = leftCellIndex;
+      }
+    }
+
+    // Go Down
+    else if (news === 3) {
+      if (blankCellIndex[0] + 1 < _size) {
+        const downCellIndex = [blankCellIndex[0] + 1, blankCellIndex[1]];
+        swapCells(blankCellIndex, downCellIndex);
+        blankCellIndex = downCellIndex;
+      }
+    }
+
+    // Go Up
+    else if (news === 4) {
+      if (blankCellIndex[0] - 1 >= 0) {
+        const upCellIndex = [blankCellIndex[0] - 1, blankCellIndex[1]];
+        swapCells(blankCellIndex, upCellIndex);
+        blankCellIndex = upCellIndex;
+      }
+    }
   }
 
+  _blankSquare = blankCellIndex;
   _success = false; //If shuffled button clicked after success, it prevents automatic reshuffling on clicking on a block
-  assignColor();
+  render();
+};
 
-  /*
-   * Resetting the positions of the blocks
-   */
-  function reset() {
-    for (i = 1; i < 16; i++) {
-      document.getElementById(i).innerHTML = i;
-      document.getElementById(i).style.visibility = "visible";
-    }
-    document.getElementById(16).innerHTML = "";
-    document.getElementById(16).style.visibility = "hidden";
+const render = () => {
+  let currentCell;
+  let maxSolvedValue = 0;
 
-    _count = 0;
-    document.getElementById("count").innerHTML = "";
-  }
-}
-
-/*
- * Marking the solved squares and next pick
- */
-function assignColor() {
-  let maxSolved = 0;
-  for (i = 1; i < 17; i++) {
-    if (document.getElementById(i).innerHTML == i) {
-      document.getElementById(i).style.color = "yellowgreen";
-
-      if (i == maxSolved + 1) {
-        maxSolved = i;
+  for (let i = 0; i < _size; i++) {
+    for (let j = 0; j < _size; j++) {
+      currentCell = _squares[i][j];
+      if (currentCell.isModified) {
+        document.getElementById(currentCell.id).innerHTML = currentCell.value;
+        if (currentCell.value == "") {
+          document.getElementById(currentCell.id).style.visibility = "hidden";
+        } else {
+          document.getElementById(currentCell.id).style.visibility = "visible";
+          if (currentCell.value === i * _size + j + 1) {
+            document.getElementById(currentCell.id).style.color = "yellowgreen";
+          } else {
+            document.getElementById(currentCell.id).style.color = "grey";
+          }
+        }
+        _squares[i][j].isModified = false;
       }
-    } else {
-      document.getElementById(i).style.color = "grey";
-    }
-  }
-  if (maxSolved < 15) {
-    for (i = 1; i < 17; i++) {
-      if (document.getElementById(i).innerHTML == maxSolved + 1) {
-        document.getElementById(i).style.color = "tomato";
-        break;
+      if (
+        currentCell.value === i * _size + j + 1 &&
+        maxSolvedValue === currentCell.value - 1
+      ) {
+        maxSolvedValue++;
       }
     }
   }
-}
+
+  if (maxSolvedValue < _size * _size - 1) {
+    const nexToBeSolved = _squares
+      .find((row) => row.some((cell) => cell.value === maxSolvedValue + 1))
+      .find((cell) => cell.value === maxSolvedValue + 1);
+    document.getElementById(nexToBeSolved.id).style.color = "tomato";
+  }
+
+  document.getElementById("count").innerHTML = _count === 0 ? "" : _count;
+
+  if (maxSolvedValue === _size * _size - 1) {
+    showSuccess();
+  }
+};
+
+const showSuccess = () => {
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 },
+  });
+  _success = true;
+};
+
+const swapCells = (x, y) => {
+  const temp = { ..._squares[x[0]][x[1]] };
+  _squares[x[0]][x[1]] = {
+    ..._squares[x[0]][x[1]],
+    isModified: true,
+    value: _squares[y[0]][y[1]].value,
+  };
+  _squares[y[0]][y[1]] = {
+    ..._squares[y[0]][y[1]],
+    isModified: true,
+    value: temp.value,
+  };
+};
+
+const reset = () => {
+  for (let i = 0; i < _size; i++) {
+    for (let j = 0; j < _size; j++) {
+      _squares[i][j].value = i * _size + j + 1;
+      _squares[i][j].isModified = true;
+    }
+  }
+  resetLastSquare();
+  _count = 0;
+};
+
+const resetLastSquare = () => {
+  _squares[_size - 1][_size - 1] = {
+    id: _size * _size,
+    value: "",
+    isModified: true,
+  };
+  _blankSquare = [_size - 1, _size - 1];
+};
