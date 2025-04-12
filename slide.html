@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SlideRun</title>
+    <link rel="stylesheet" href="slide.css" />
+    <script src="slide.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  </head>
+
+  <body onload="onLoad()">
+    <header>
+      <div class="header"></div>
+    </header>
+    <main>
+      <div id="container" class="container"></div>
+    </main>
+    <footer>
+      <div class="footer">
+          <button class="button-outline" onclick="home()">Home</button>
+          <button class="button-outline" onclick="shuffle()">Restart</button>
+      </div>
+    </footer>
+    <aside>
+      <div id="count" class="count"></div>
+    </aside>
+    </div>
+  </body>
+</html>
