@@ -1,13 +1,25 @@
-const _size = 4;
+let _size = 4;
 const _maxShuffleRunThreshold = 50;
 const _squares = new Array(_size);
 let _blankSquare = [];
 let _count = 0;
 let _success = false;
 
-document.addEventListener("DOMContentLoaded", () => {
+// document.addEventListener("DOMContentLoaded", () => {
+//   setGridTemplateColumns();
+// });
+
+const onLoad = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const size = urlParams.get("size");
+  if (!isNaN(size) && size >= 2 && size <= 8) {
+    _size = size;
+  }
   setGridTemplateColumns();
-});
+  initialize();
+  shuffle();
+  render();
+};
 
 const initialize = () => {
   for (let i = 0; i < _size; i++) {
@@ -46,12 +58,6 @@ const createSquares = () => {
       container.appendChild(square);
     }
   }
-};
-
-const onLoad = () => {
-  initialize();
-  shuffle();
-  render();
 };
 
 const setGridTemplateColumns = () => {
@@ -149,7 +155,6 @@ const shuffle = () => {
   let blankCellIndex = _blankSquare; // Run the blank cell around
   const maxShuffleRun =
     _size < 4 ? 50 : Math.abs(_size - 2) * _maxShuffleRunThreshold;
-  console.log(maxShuffleRun);
   let i = 0;
 
   // Run until it finds the blank cell in the last position after 100 iterations
@@ -289,4 +294,8 @@ const resetLastSquare = () => {
     isModified: true,
   };
   _blankSquare = [_size - 1, _size - 1];
+};
+
+const home = () => {
+  window.location.href = "index.html";
 };

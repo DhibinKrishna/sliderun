@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  background-color: cadetblue;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: silver;
+  font-size: xx-large;
+  margin: 2rem;
+}
+
+.container {
+  margin: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.container > div {
+  padding: 2rem 4rem;
+  background-color: teal;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: silver;
+  font-weight: bold;
+  font-size: xx-large;
+  cursor: pointer;
+  border-radius: 8px;
+}
