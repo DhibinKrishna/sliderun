@@ -14,8 +14,9 @@ body {
   justify-content: center;
   align-items: center;
   color: silver;
-  font-size: xx-large;
+  font-size: x-large;
   margin: 2rem;
+  text-align: center;
 }
 
 .container {
@@ -25,10 +26,12 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  max-width: 90vw;
+  max-height: 90vh;
 }
 
 .container > div {
-  padding: 2rem 4rem;
+  padding: 1rem 3rem;
   background-color: teal;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
