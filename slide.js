@@ -145,68 +145,75 @@ const shift = (fromCellIndex, toCellIndex, direction) => {
   }
 };
 
+const restart = () => {
+  shuffle();
+  render();
+};
+
 /*
  * Move the blank square randomly to neighbouring squares - Up/Down/Left/Right
  * Following this approach for ease of solving the squares
  * Starting from blank square at 16
  */
 const shuffle = () => {
-  reset();
-  let blankCellIndex = _blankSquare; // Run the blank cell around
   const maxShuffleRun =
     _size < 4 ? 50 : Math.abs(_size - 2) * _maxShuffleRunThreshold;
-  let i = 0;
+  let isSolved = true;
 
-  // Run until it finds the blank cell in the last position after 100 iterations
-  while (
-    i < maxShuffleRun ||
-    (i >= maxShuffleRun &&
-      (blankCellIndex[0] !== _size - 1 || blankCellIndex[1] !== _size - 1))
-  ) {
-    i++;
-    news = Math.ceil(4 * Math.random()); // NEWS - direction
+  while (isSolved) {
+    reset();
+    let blankCellIndex = _blankSquare; // Run the blank cell around
+    let i = 0;
+    // Run until it finds the blank cell in the last position after 100 iterations
+    while (
+      i < maxShuffleRun ||
+      (i >= maxShuffleRun &&
+        (blankCellIndex[0] !== _size - 1 || blankCellIndex[1] !== _size - 1))
+    ) {
+      i++;
+      news = Math.ceil(4 * Math.random()); // NEWS - direction
 
-    // Go Right
-    if (news === 1) {
-      if (blankCellIndex[1] + 1 < _size) {
-        // If squares available to the right
-        const rightCellIndex = [blankCellIndex[0], blankCellIndex[1] + 1];
-        swapCells(blankCellIndex, rightCellIndex);
-        blankCellIndex = rightCellIndex;
+      // Go Right
+      if (news === 1) {
+        if (blankCellIndex[1] + 1 < _size) {
+          // If squares available to the right
+          const rightCellIndex = [blankCellIndex[0], blankCellIndex[1] + 1];
+          swapCells(blankCellIndex, rightCellIndex);
+          blankCellIndex = rightCellIndex;
+        }
+      }
+
+      // Go Left
+      else if (news === 2) {
+        if (blankCellIndex[1] - 1 >= 0) {
+          const leftCellIndex = [blankCellIndex[0], blankCellIndex[1] - 1];
+          swapCells(blankCellIndex, leftCellIndex);
+          blankCellIndex = leftCellIndex;
+        }
+      }
+
+      // Go Down
+      else if (news === 3) {
+        if (blankCellIndex[0] + 1 < _size) {
+          const downCellIndex = [blankCellIndex[0] + 1, blankCellIndex[1]];
+          swapCells(blankCellIndex, downCellIndex);
+          blankCellIndex = downCellIndex;
+        }
+      }
+
+      // Go Up
+      else if (news === 4) {
+        if (blankCellIndex[0] - 1 >= 0) {
+          const upCellIndex = [blankCellIndex[0] - 1, blankCellIndex[1]];
+          swapCells(blankCellIndex, upCellIndex);
+          blankCellIndex = upCellIndex;
+        }
       }
     }
-
-    // Go Left
-    else if (news === 2) {
-      if (blankCellIndex[1] - 1 >= 0) {
-        const leftCellIndex = [blankCellIndex[0], blankCellIndex[1] - 1];
-        swapCells(blankCellIndex, leftCellIndex);
-        blankCellIndex = leftCellIndex;
-      }
-    }
-
-    // Go Down
-    else if (news === 3) {
-      if (blankCellIndex[0] + 1 < _size) {
-        const downCellIndex = [blankCellIndex[0] + 1, blankCellIndex[1]];
-        swapCells(blankCellIndex, downCellIndex);
-        blankCellIndex = downCellIndex;
-      }
-    }
-
-    // Go Up
-    else if (news === 4) {
-      if (blankCellIndex[0] - 1 >= 0) {
-        const upCellIndex = [blankCellIndex[0] - 1, blankCellIndex[1]];
-        swapCells(blankCellIndex, upCellIndex);
-        blankCellIndex = upCellIndex;
-      }
-    }
+    isSolved = checkIfSolved();
+    _blankSquare = blankCellIndex;
   }
-
-  _blankSquare = blankCellIndex;
   _success = false; //If shuffled button clicked after success, it prevents automatic reshuffling on clicking on a block
-  render();
 };
 
 const render = () => {
@@ -260,6 +267,21 @@ const showSuccess = () => {
     origin: { y: 0.6 },
   });
   _success = true;
+};
+
+const checkIfSolved = () => {
+  for (let i = 0; i < _size; i++) {
+    for (let j = 0; j < _size; j++) {
+      if (_squares[i][j].value !== i * _size + j + 1) {
+        if (i === _size - 1 && j === _size - 1) {
+          // Ignore the last square
+          continue;
+        }
+        return false;
+      }
+    }
+  }
+  return true;
 };
 
 const swapCells = (x, y) => {
