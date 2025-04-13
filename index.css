@@ -39,7 +39,8 @@ body {
   align-items: center;
   color: silver;
   font-weight: bold;
-  font-size: xx-large;
   cursor: pointer;
   border-radius: 8px;
+  border-radius: min(1vw, 1vh);
+  font-size: clamp(1rem, min(4vw, 4vh), 4rem);
 }
