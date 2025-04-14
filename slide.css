@@ -1,26 +1,32 @@
+:root {
+  --body-background-color: #1b4242;
+  --square-background-color: #5c8374;
+  --solved-color: #9ec8b9;
+  --next-to-solve-color: tomato;
+}
+
 body {
   margin: 0;
-  background-color: cadetblue;
+  background-color: var(--body-background-color);
   font-family: Arial, sans-serif;
 }
 
 .container {
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); */
   grid-gap: clamp(0.25rem, min(1vw, 1vh), 2rem);
   aspect-ratio: 1;
   margin: 0 auto;
 }
 
 .container > div {
-  background-color: lightgray;
+  background-color: var(--square-background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s;
   aspect-ratio: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: grey;
+  color: var(--body-background-color);
   font-weight: bold;
   cursor: pointer;
   border-radius: min(1vw, 1vh);
@@ -30,15 +36,15 @@ body {
 .footer {
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 1rem;
 }
 
 .button-outline {
   background-color: transparent;
-  border: 2px solid lightgray;
-  color: lightgray;
+  border: 2px solid var(--square-background-color);
+  color: var(--square-background-color);
   padding: min(0.5vw, 0.5vh) min(2vw, 2vh);
   text-align: center;
   text-decoration: none;
@@ -47,11 +53,14 @@ body {
   cursor: pointer;
   border-radius: min(1vw, 1vh);
   transition: background-color 0.3s ease, color 0.3s ease;
+  flex-grow: 1;
+  width: auto;
+  font-size: min(4vw, 4vh);
 }
 
 .button-outline:hover {
-  background-color: lightgray;
-  color: gray;
+  background-color: var(--square-background-color);
+  color: var(--body-background-color);
 }
 
 .count {
@@ -61,7 +70,7 @@ body {
   width: 4rem;
   height: 4rem;
   font-size: clamp(0.7rem, min(2vw, 2vh), 2rem);
-  color: lightgray;
+  color: var(--square-background-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -69,14 +78,18 @@ body {
 
 @media (orientation: portrait) {
   .header {
-    height: max(3vw, calc((100vh - 100vw) * 0.5));
+    height: max(3vw, calc((100vh - 100vw) * 0.6));
   }
   .container {
-    max-width: 90vw;
-    max-height: 90vw;
+    max-width: 80vw;
+    max-height: 80vw;
   }
   .footer {
     margin-top: 2vh;
+    max-width: 80vw;
+  }
+  .button-outline {
+    height: 8vw;
   }
 }
 
@@ -90,14 +103,12 @@ body {
   }
   .footer {
     margin-top: 2vh;
+    max-width: 80vh;
   }
 }
 
 @media (max-width: 600px), (max-height: 600px) {
   .container > div {
     font-size: min(7vw, 7vh);
-  }
-  .button-outline {
-    width: min(40vw, 40vh);
   }
 }

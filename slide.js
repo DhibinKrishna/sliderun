@@ -1,13 +1,13 @@
 let _size = 4;
 const _maxShuffleRunThreshold = 50;
 const _squares = new Array(_size);
+const _nextToSolveColor = "var(--next-to-solve-color)";
+const _solvedColor = "var(--solved-color)";
+const _bodyBackgroundColor = "var(--body-background-color)";
 let _blankSquare = [];
+let _nextToBeSolvedId = null;
 let _count = 0;
 let _success = false;
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   setGridTemplateColumns();
-// });
 
 const onLoad = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -220,6 +220,11 @@ const render = () => {
   let currentCell;
   let maxSolvedValue = 0;
 
+  if (_nextToBeSolvedId != null) {
+    document.getElementById(_nextToBeSolvedId).style.color =
+      _bodyBackgroundColor;
+  }
+
   for (let i = 0; i < _size; i++) {
     for (let j = 0; j < _size; j++) {
       currentCell = _squares[i][j];
@@ -230,9 +235,10 @@ const render = () => {
         } else {
           document.getElementById(currentCell.id).style.visibility = "visible";
           if (currentCell.value === i * _size + j + 1) {
-            document.getElementById(currentCell.id).style.color = "yellowgreen";
+            document.getElementById(currentCell.id).style.color = _solvedColor;
           } else {
-            document.getElementById(currentCell.id).style.color = "grey";
+            document.getElementById(currentCell.id).style.color =
+              _bodyBackgroundColor;
           }
         }
         _squares[i][j].isModified = false;
@@ -250,7 +256,8 @@ const render = () => {
     const nexToBeSolved = _squares
       .find((row) => row.some((cell) => cell.value === maxSolvedValue + 1))
       .find((cell) => cell.value === maxSolvedValue + 1);
-    document.getElementById(nexToBeSolved.id).style.color = "tomato";
+    document.getElementById(nexToBeSolved.id).style.color = _nextToSolveColor;
+    _nextToBeSolvedId = nexToBeSolved.id;
   }
 
   document.getElementById("count").innerHTML = _count === 0 ? "" : _count;
@@ -307,6 +314,7 @@ const reset = () => {
   }
   resetLastSquare();
   _count = 0;
+  _nextToBeSolvedId = null;
 };
 
 const resetLastSquare = () => {
