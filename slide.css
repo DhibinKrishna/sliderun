@@ -35,32 +35,6 @@ body {
   gap: 1rem;
 }
 
-@media (orientation: portrait) {
-  .header {
-    height: calc((100vh - 100vw) * 0.5);
-  }
-  .container {
-    max-width: 90vw;
-    max-height: 90vw;
-  }
-  .footer {
-    margin-top: 2vh;
-  }
-}
-
-@media (orientation: landscape) {
-  .header {
-    height: calc(100vh * 0.07);
-  }
-  .container {
-    max-width: 80vh;
-    max-height: 80vh;
-  }
-  .footer {
-    margin-top: 2vh;
-  }
-}
-
 .button-outline {
   background-color: transparent;
   border: 2px solid lightgray;
@@ -91,4 +65,39 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (orientation: portrait) {
+  .header {
+    height: max(3vw, calc((100vh - 100vw) * 0.5));
+  }
+  .container {
+    max-width: 90vw;
+    max-height: 90vw;
+  }
+  .footer {
+    margin-top: 2vh;
+  }
+}
+
+@media (orientation: landscape) {
+  .header {
+    height: calc(100vh * 0.07);
+  }
+  .container {
+    max-width: 80vh;
+    max-height: 80vh;
+  }
+  .footer {
+    margin-top: 2vh;
+  }
+}
+
+@media (max-width: 600px), (max-height: 600px) {
+  .container > div {
+    font-size: min(7vw, 7vh);
+  }
+  .button-outline {
+    width: min(40vw, 40vh);
+  }
 }
