@@ -1,6 +1,11 @@
+:root {
+  --body-background-color: #1b4242;
+  --square-background-color: #5c8374;
+}
+
 body {
   margin: 0;
-  background-color: cadetblue;
+  background-color: var(--body-background-color);
   font-family: Arial, sans-serif;
   height: 100vh;
   display: flex;
@@ -13,7 +18,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: silver;
+  color: var(--square-background-color);
   font-size: x-large;
   margin: 2rem;
   text-align: center;
@@ -32,12 +37,12 @@ body {
 
 .container > div {
   padding: 1rem 3rem;
-  background-color: teal;
+  background-color: var(--square-background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: silver;
+  color: var(--body-background-color);
   font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
