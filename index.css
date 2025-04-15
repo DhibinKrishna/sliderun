@@ -1,6 +1,7 @@
 :root {
   --body-background-color: #1b4242;
   --square-background-color: #5c8374;
+  --glow-color: #00ffcc;
 }
 
 body {
@@ -48,4 +49,9 @@ body {
   border-radius: 8px;
   border-radius: min(1vw, 1vh);
   font-size: clamp(1rem, min(4vw, 4vh), 4rem);
+}
+
+.container > div:hover {
+  box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+  color: var(--glow-color);
 }
