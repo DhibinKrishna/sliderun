@@ -46,7 +46,7 @@ body {
 
 .button-outline {
   background-color: transparent;
-  border: 2px solid var(--square-background-color);
+  border: 1px solid var(--square-background-color);
   color: var(--square-background-color);
   padding: min(0.5vw, 0.5vh) min(2vw, 2vh);
   text-align: center;
@@ -54,13 +54,12 @@ body {
   display: inline-block;
   cursor: pointer;
   border-radius: min(1vw, 1vh);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: box-shadow 0.3s ease, color 0.3s ease;
   flex-grow: 1;
   width: auto;
 }
 
 .button-outline:hover {
-  background-color: var(--square-background-color);
   box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
   color: var(--glow-color);
 }

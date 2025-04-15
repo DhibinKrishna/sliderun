@@ -38,17 +38,19 @@ body {
 
 .container > div {
   padding: 1rem 3rem;
-  background-color: var(--square-background-color);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* background-color: var(--square-background-color); */
+  background-color: transparent;
+  border: 1px solid var(--square-background-color);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--body-background-color);
+  color: var(--square-background-color);
   font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
   border-radius: min(1vw, 1vh);
   font-size: clamp(1rem, min(4vw, 4vh), 4rem);
+  transition: box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .container > div:hover {
