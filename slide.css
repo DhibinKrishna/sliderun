@@ -3,6 +3,9 @@
   --square-background-color: #5c8374;
   --solved-color: #9ec8b9;
   --next-to-solve-color: tomato;
+  --glow-color: #00ffcc;
+  --font-size-small: 1rem;
+  --font-size-medium: 1.5rem;
 }
 
 body {
@@ -49,18 +52,17 @@ body {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: clamp(0.7rem, min(2vw, 2vh), 2rem);
   cursor: pointer;
   border-radius: min(1vw, 1vh);
   transition: background-color 0.3s ease, color 0.3s ease;
   flex-grow: 1;
   width: auto;
-  font-size: min(4vw, 4vh);
 }
 
 .button-outline:hover {
   background-color: var(--square-background-color);
-  color: var(--body-background-color);
+  box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+  color: var(--glow-color);
 }
 
 .count {
@@ -110,5 +112,17 @@ body {
 @media (max-width: 600px), (max-height: 600px) {
   .container > div {
     font-size: min(7vw, 7vh);
+  }
+}
+
+@media (max-width: 768px) {
+  .button-outline {
+    font-size: var(--font-size-small);
+  }
+}
+
+@media (min-width: 768px) {
+  .button-outline {
+    font-size: var(--font-size-medium);
   }
 }
