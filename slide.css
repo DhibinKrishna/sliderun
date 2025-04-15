@@ -24,7 +24,6 @@ body {
 .container > div {
   background-color: var(--square-background-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
   aspect-ratio: 1;
   display: flex;
   justify-content: center;
@@ -34,6 +33,7 @@ body {
   cursor: pointer;
   border-radius: min(1vw, 1vh);
   font-size: min(4vw, 4vh);
+  -webkit-tap-highlight-color: transparent; /* Prevent blue highlight on tap */
 }
 
 .footer {
