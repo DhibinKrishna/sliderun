@@ -3,7 +3,7 @@ const _maxShuffleRunThreshold = 50;
 const _squares = new Array(_size);
 const _nextToSolveColor = "var(--next-to-solve-color)";
 const _solvedColor = "var(--solved-color)";
-const _bodyBackgroundColor = "var(--body-background-color)";
+const _squareBackgroundColor = "var(--primary-color)";
 let _blankSquare = [];
 let _nextToBeSolvedId = null;
 let _count = 0;
@@ -160,6 +160,7 @@ const shuffle = () => {
     _size < 4 ? 50 : Math.abs(_size - 2) * _maxShuffleRunThreshold;
   let isSolved = true;
 
+  // Avoid presenting a solved state after shuffle
   while (isSolved) {
     reset();
     let blankCellIndex = _blankSquare; // Run the blank cell around
@@ -213,7 +214,7 @@ const shuffle = () => {
     isSolved = checkIfSolved();
     _blankSquare = blankCellIndex;
   }
-  _success = false; //If shuffled button clicked after success, it prevents automatic reshuffling on clicking on a block
+  _success = false; //If Restart button clicked after success, it prevents automatic reshuffling on clicking on a block
 };
 
 const render = () => {
@@ -222,7 +223,7 @@ const render = () => {
 
   if (_nextToBeSolvedId != null) {
     document.getElementById(_nextToBeSolvedId).style.color =
-      _bodyBackgroundColor;
+      _squareBackgroundColor;
   }
 
   for (let i = 0; i < _size; i++) {
@@ -238,7 +239,7 @@ const render = () => {
             document.getElementById(currentCell.id).style.color = _solvedColor;
           } else {
             document.getElementById(currentCell.id).style.color =
-              _bodyBackgroundColor;
+              _squareBackgroundColor;
           }
         }
         _squares[i][j].isModified = false;

@@ -1,12 +1,17 @@
 :root {
-  --body-background-color: #1b4242;
-  --square-background-color: #5c8374;
+  --body-background-color-1: #1b4242;
+  --body-background-color-2: #2c7878;
+  --primary-color: #78a996;
   --glow-color: #00ffcc;
 }
 
 body {
   margin: 0;
-  background-color: var(--body-background-color);
+  background: linear-gradient(
+    135deg,
+    var(--body-background-color-1),
+    var(--body-background-color-2)
+  );
   font-family: Arial, sans-serif;
   height: 100vh;
   display: flex;
@@ -19,7 +24,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--square-background-color);
+  color: var(--primary-color);
   font-size: x-large;
   margin: 2rem;
   text-align: center;
@@ -38,13 +43,12 @@ body {
 
 .container > div {
   padding: 1rem 3rem;
-  /* background-color: var(--square-background-color); */
   background-color: transparent;
-  border: 1px solid var(--square-background-color);
+  border: 1px solid var(--primary-color);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--square-background-color);
+  color: var(--primary-color);
   font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
