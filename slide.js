@@ -9,6 +9,31 @@ let _nextToBeSolvedId = null;
 let _count = 0;
 let _success = false;
 
+document.addEventListener("keydown", (event) => {
+  if (_success) return;
+
+  switch (event.key) {
+    case "ArrowUp":
+      moveBlankSquareUp(event.shiftKey);
+      event.preventDefault();
+      break;
+    case "ArrowDown":
+      moveBlankSquareDown(event.shiftKey);
+      event.preventDefault();
+      break;
+    case "ArrowLeft":
+      moveBlankSquareLeft(event.shiftKey);
+      event.preventDefault();
+      break;
+    case "ArrowRight":
+      moveBlankSquareRight(event.shiftKey);
+      event.preventDefault();
+      break;
+    default:
+      break;
+  }
+});
+
 const onLoad = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const size = urlParams.get("size");
@@ -66,48 +91,47 @@ const setGridTemplateColumns = () => {
 };
 
 const clicked = (i, j) => {
-  if (_success == true) {
-    // Automatically shuffles after success
-    _success = false;
-    shuffle();
-    render();
-  } else {
-    const clickedCellIndex = [i, j];
+  if (_success) return;
 
-    // Check if the row has blank square
-    if (clickedCellIndex[0] === _blankSquare[0]) {
-      // Right
-      if (_blankSquare[1] > clickedCellIndex[1]) {
-        shift(clickedCellIndex, _blankSquare, "right");
-        _blankSquare = clickedCellIndex;
-      }
-      // Left
-      else {
-        shift(clickedCellIndex, _blankSquare, "left");
-        _blankSquare = clickedCellIndex;
-      }
-      _count++;
-      render();
-      // Check if the column has blank square
-    } else if (clickedCellIndex[1] === _blankSquare[1]) {
-      // Down
-      if (_blankSquare[0] > clickedCellIndex[0]) {
-        shift(clickedCellIndex, _blankSquare, "down");
-        _blankSquare = clickedCellIndex;
-      }
-      // Up
-      else {
-        shift(clickedCellIndex, _blankSquare, "up");
-        _blankSquare = clickedCellIndex;
-      }
-      _count++;
-      render();
+  const clickedCellIndex = [i, j];
+
+  // Check if the row has blank square
+  if (clickedCellIndex[0] === _blankSquare[0]) {
+    // Right
+    if (_blankSquare[1] > clickedCellIndex[1]) {
+      shift(clickedCellIndex, _blankSquare, "right");
+      _blankSquare = clickedCellIndex;
     }
+    // Left
+    else {
+      shift(clickedCellIndex, _blankSquare, "left");
+      _blankSquare = clickedCellIndex;
+    }
+    _count++;
+    render();
+    // Check if the column has blank square
+  } else if (clickedCellIndex[1] === _blankSquare[1]) {
+    // Down
+    if (_blankSquare[0] > clickedCellIndex[0]) {
+      shift(clickedCellIndex, _blankSquare, "down");
+      _blankSquare = clickedCellIndex;
+    }
+    // Up
+    else {
+      shift(clickedCellIndex, _blankSquare, "up");
+      _blankSquare = clickedCellIndex;
+    }
+    _count++;
+    render();
   }
 };
 
 /*
  * Blank cell travels opposite to 'direction'
+ * right => from left to right
+ * left => from right to left
+ * down => from top to bottom
+ * up => from bottom to top
  */
 const shift = (fromCellIndex, toCellIndex, direction) => {
   const length = Math.abs(
@@ -196,9 +220,9 @@ const shuffle = () => {
       // Go Down
       else if (news === 3) {
         if (blankCellIndex[0] + 1 < _size) {
-          const downCellIndex = [blankCellIndex[0] + 1, blankCellIndex[1]];
-          swapCells(blankCellIndex, downCellIndex);
-          blankCellIndex = downCellIndex;
+          const bottomCellIndex = [blankCellIndex[0] + 1, blankCellIndex[1]];
+          swapCells(blankCellIndex, bottomCellIndex);
+          blankCellIndex = bottomCellIndex;
         }
       }
 
@@ -214,7 +238,7 @@ const shuffle = () => {
     isSolved = checkIfSolved();
     _blankSquare = blankCellIndex;
   }
-  _success = false; //If Restart button clicked after success, it prevents automatic reshuffling on clicking on a block
+  _success = false;
 };
 
 const render = () => {
@@ -264,6 +288,7 @@ const render = () => {
   document.getElementById("count").innerHTML = _count === 0 ? "" : _count;
 
   if (maxSolvedValue === _size * _size - 1) {
+    _success = true;
     showSuccess();
   }
 };
@@ -274,7 +299,6 @@ const showSuccess = () => {
     spread: 70,
     origin: { y: 0.6 },
   });
-  _success = true;
 };
 
 const checkIfSolved = () => {
@@ -329,4 +353,70 @@ const resetLastSquare = () => {
 
 const home = () => {
   window.location.href = "index.html";
+};
+
+const moveBlankSquareUp = (isShiftPressed) => {
+  // If squares available on top
+  if (_blankSquare[0] - 1 >= 0) {
+    if (isShiftPressed) {
+      const topMostCellIndex = [0, _blankSquare[1]];
+      // Shift happens in the opposite direction
+      shift(topMostCellIndex, _blankSquare, "down");
+      _blankSquare = topMostCellIndex;
+    } else {
+      const upCellIndex = [_blankSquare[0] - 1, _blankSquare[1]];
+      swapCells(_blankSquare, upCellIndex);
+      _blankSquare = upCellIndex;
+    }
+    _count++;
+    render();
+  }
+};
+
+const moveBlankSquareDown = (isShiftPressed) => {
+  if (_blankSquare[0] + 1 < _size) {
+    if (isShiftPressed) {
+      const bottomMostCellIndex = [_size - 1, _blankSquare[1]];
+      shift(bottomMostCellIndex, _blankSquare, "up");
+      _blankSquare = bottomMostCellIndex;
+    } else {
+      const bottomCellIndex = [_blankSquare[0] + 1, _blankSquare[1]];
+      swapCells(_blankSquare, bottomCellIndex);
+      _blankSquare = bottomCellIndex;
+    }
+    _count++;
+    render();
+  }
+};
+
+const moveBlankSquareLeft = (isShiftPressed) => {
+  if (_blankSquare[1] - 1 >= 0) {
+    if (isShiftPressed) {
+      const leftMostCellIndex = [_blankSquare[0], 0];
+      shift(leftMostCellIndex, _blankSquare, "right");
+      _blankSquare = leftMostCellIndex;
+    } else {
+      const leftCellIndex = [_blankSquare[0], _blankSquare[1] - 1];
+      swapCells(_blankSquare, leftCellIndex);
+      _blankSquare = leftCellIndex;
+    }
+    _count++;
+    render();
+  }
+};
+
+const moveBlankSquareRight = (isShiftPressed) => {
+  if (_blankSquare[1] + 1 < _size) {
+    if (isShiftPressed) {
+      const rightMostCellIndex = [_blankSquare[0], _size - 1];
+      shift(rightMostCellIndex, _blankSquare, "left");
+      _blankSquare = rightMostCellIndex;
+    } else {
+      const rightCellIndex = [_blankSquare[0], _blankSquare[1] + 1];
+      swapCells(_blankSquare, rightCellIndex);
+      _blankSquare = rightCellIndex;
+    }
+    _count++;
+    render();
+  }
 };
