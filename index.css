@@ -41,15 +41,11 @@ body {
   max-height: 90vh;
 }
 
-.container > div {
+.container > button {
   padding: 1rem 3rem;
   background-color: transparent;
   border: 1px solid var(--primary-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   color: var(--primary-color);
-  font-weight: bold;
   cursor: pointer;
   border-radius: 8px;
   border-radius: min(1vw, 1vh);
@@ -57,7 +53,7 @@ body {
   transition: box-shadow 0.3s ease, color 0.3s ease;
 }
 
-.container > div:hover {
+.container > button:hover {
   box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
   color: var(--glow-color);
 }

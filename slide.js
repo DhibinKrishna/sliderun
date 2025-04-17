@@ -172,6 +172,9 @@ const shift = (fromCellIndex, toCellIndex, direction) => {
 const restart = () => {
   shuffle();
   render();
+  document.getElementById("status").textContent =
+    "You have restarted the puzzle!";
+  document.getElementById("status").focus();
 };
 
 /*
@@ -239,6 +242,7 @@ const shuffle = () => {
     _blankSquare = blankCellIndex;
   }
   _success = false;
+  document.getElementById("status").textContent = "";
 };
 
 const render = () => {
@@ -294,6 +298,10 @@ const render = () => {
 };
 
 const showSuccess = () => {
+  document.getElementById("status").textContent =
+    "Congrats! You solved the puzzle!";
+  document.getElementById("status").focus(); // a11y
+
   confetti({
     particleCount: 100,
     spread: 70,
@@ -352,7 +360,7 @@ const resetLastSquare = () => {
 };
 
 const home = () => {
-  window.location.href = "index.html";
+  window.location.href = "/";
 };
 
 const moveBlankSquareUp = (isShiftPressed) => {
