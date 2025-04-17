@@ -14,20 +14,19 @@
   </head>
 
   <body onload="onLoad()">
-    <header>
-      <div class="header"></div>
-    </header>
+    <div class="header"></div>
     <main>
-      <div id="container" class="container"></div>
+      <div aria-label="Slides" id="container" class="container" role="grid"></div>
     </main>
     <footer>
       <div class="footer">
-          <button class="button-outline" onclick="home()">Home</button>
-          <button class="button-outline" onclick="restart()">Restart</button>
+          <button aria-label="Go to Home page" class="button-outline" onclick="home()">Home</button>
+          <button aria-label="Restart the puzzle" class="button-outline" onclick="restart()">Restart</button>
       </div>
     </footer>
     <aside>
       <div id="count" class="count"></div>
+      <span id="status" aria-live="assertive" class="visually-hidden"></span>
     </aside>
     </div>
   </body>
