@@ -360,7 +360,7 @@ const resetLastSquare = () => {
 };
 
 const home = () => {
-  window.location.href = "/";
+  window.location.href = "/index.html";
 };
 
 const moveBlankSquareUp = (isShiftPressed) => {
