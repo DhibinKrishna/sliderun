@@ -8,26 +8,127 @@
       content="Play the ultimate slider puzzle game! Solve slider puzzles of various sizes and challenge your brain with this fun."
     />
     <title>SlideRun - Puzzle Game</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/favicon-16x16.png"
+    />
     <link rel="stylesheet" href="slide.css" />
-    <script src="slide.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script defer src="slide.js"></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
+    ></script>
   </head>
 
   <body onload="onLoad()">
     <div class="header"></div>
     <main>
-      <div aria-label="Slides" id="container" class="container" role="grid"></div>
+      <div
+        aria-label="Slides"
+        id="container"
+        class="container"
+        role="grid"
+      ></div>
     </main>
     <footer>
       <div class="footer">
-          <button aria-label="Go to Home page" class="button-outline" onclick="home()">Home</button>
-          <button aria-label="Restart the puzzle" class="button-outline" onclick="restart()">Restart</button>
+        <button
+          aria-label="Go to Home page"
+          class="button-outline"
+          onclick="home()"
+        >
+          Home
+        </button>
+        <button
+          aria-label="Restart the puzzle"
+          class="button-outline"
+          onclick="restart()"
+        >
+          Restart
+        </button>
       </div>
     </footer>
     <aside>
       <div id="count" class="count"></div>
-      <span id="status" aria-live="assertive" class="visually-hidden"></span>
     </aside>
-    </div>
+    <span id="status" aria-live="assertive" class="visually-hidden"></span>
+    <button
+      id="info-button"
+      class="info-button"
+      aria-label="Open Info Modal"
+      title="Info"
+      onclick="showInfoModal()"
+    >
+      i
+    </button>
+    <dialog id="info-modal" class="info-modal" role="dialog">
+      <div class="modal-content">
+        <section>
+          <div class="modal-header-group">
+            <div class="modal-header">
+              <h3>Welcome to the Sliding Puzzle!</h3>
+            </div>
+            <button
+              class="close-x-button"
+              aria-label="Close Info Modal"
+              onclick="closeInfoModal()"
+            >
+              x
+            </button>
+          </div>
+          <p>
+            Test your puzzle-solving skills in this classic sliding game! Your
+            goal is to arrange the numbered squares in ascending order by
+            sliding them into the blank space.
+          </p>
+          <p>All the best!</p>
+        </section>
+        <section>
+          <h4>Mouse Controls</h4>
+          <div class="left-align">
+            <ul>
+              <li>
+                <strong>Click a Square</strong>: Click any square in the same
+                row or column as the blank square to move it toward the blank
+                square.
+              </li>
+              <li>
+                <strong>Multiple Squares</strong>: Clicking a square may move
+                multiple squares at once if they are in the same row or column
+                and aligned with the blank square.
+              </li>
+            </ul>
+          </div>
+          <h4>Keyboard Controls</h4>
+          <div class="left-align">
+            <ul>
+              <li>
+                <strong>Arrow Keys</strong>: Use the arrow keys to move the
+                blank square in the desired direction.
+              </li>
+              <li>
+                <strong>Shift + Arrow Keys</strong>: Hold Shift and press arrow
+                key to move the blank square to the edge of the grid.
+              </li>
+            </ul>
+          </div>
+        </section>
+        <button
+          class="close-button"
+          aria-label="Close Info Modal"
+          onclick="closeInfoModal()"
+        >
+          Close
+        </button>
+      </div>
+    </dialog>
   </body>
 </html>
