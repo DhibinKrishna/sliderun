@@ -5,6 +5,10 @@
   --glow-color: #00ffcc;
 }
 
+html {
+  color-scheme: dark;
+}
+
 body {
   margin: 0;
   background: linear-gradient(
@@ -47,9 +51,9 @@ body {
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
   cursor: pointer;
-  border-radius: 8px;
   border-radius: min(1vw, 1vh);
   font-size: clamp(1rem, min(4vw, 4vh), 4rem);
+  box-shadow: -5px 5px 5px 2px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease, color 0.3s ease;
 }
 

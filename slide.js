@@ -9,6 +9,16 @@ let _nextToBeSolvedId = null;
 let _count = 0;
 let _success = false;
 
+const infoButton = document.getElementById("info-button");
+const infoModal = document.getElementById("info-modal");
+
+// Close the modal when the user clicks outside of it
+infoModal.addEventListener("click", (event) => {
+  if (event.target === infoModal) {
+    infoModal.close();
+  }
+});
+
 document.addEventListener("keydown", (event) => {
   if (_success) return;
 
@@ -427,4 +437,14 @@ const moveBlankSquareRight = (isShiftPressed) => {
     _count++;
     render();
   }
+};
+
+const showInfoModal = () => {
+  infoModal.showModal();
+  const closeButton = document.getElementById("close-button");
+  closeButton.focus(); // a11y
+};
+
+const closeInfoModal = () => {
+  infoModal.close();
 };
