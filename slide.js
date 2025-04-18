@@ -370,7 +370,7 @@ const resetLastSquare = () => {
 };
 
 const home = () => {
-  window.location.href = "/index.html";
+  window.location.href = "index.html";
 };
 
 const moveBlankSquareUp = (isShiftPressed) => {
