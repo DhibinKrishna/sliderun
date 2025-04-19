@@ -47,7 +47,7 @@ document.addEventListener("keydown", (event) => {
 const onLoad = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const size = urlParams.get("size");
-  if (!isNaN(size) && size >= 2 && size <= 8) {
+  if (!isNaN(size) && size > 1 && size < 10) {
     _size = size;
   }
   setGridTemplateColumns();
@@ -441,7 +441,7 @@ const moveBlankSquareRight = (isShiftPressed) => {
 
 const showInfoModal = () => {
   infoModal.showModal();
-  const closeButton = document.getElementById("close-button");
+  const closeButton = document.getElementById("modal-close-button");
   closeButton.focus(); // a11y
 };
 
