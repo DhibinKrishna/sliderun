@@ -45,10 +45,9 @@ body {
   justify-content: center;
   align-items: center;
   color: var(--primary-color);
-  font-weight: bold;
   cursor: pointer;
   border-radius: min(1vw, 1vh);
-  font-size: min(4vw, 4vh);
+  font-size: 1.5rem;
   -webkit-tap-highlight-color: transparent; /* Prevent blue highlight on tap */
 }
 
@@ -69,7 +68,7 @@ body {
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
-  border-radius: min(1vw, 1vh);
+  border-radius: min(1.5vw, 1.5vh);
   box-shadow: -5px 5px 5px 2px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease, color 0.3s ease;
   flex-grow: 1;
@@ -87,7 +86,7 @@ body {
   right: 0;
   width: 5rem;
   height: 5rem;
-  font-size: clamp(0.7rem, min(2vw, 2vh), 2rem);
+  font-size: 1.5rem;
   color: var(--primary-color);
   display: flex;
   justify-content: center;
@@ -110,8 +109,8 @@ body {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border: none;
   border-radius: 50%;
   background-color: var(--body-background-color-1);
@@ -121,6 +120,7 @@ body {
   cursor: pointer;
   box-shadow: -5px 5px 5px 2px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
+  font-family: Georgia, "Times New Roman", Times, serif;
 }
 
 .info-button:hover {
@@ -177,7 +177,7 @@ ul > li {
   text-align: left;
 }
 
-.close-button {
+.modal-close-button {
   margin-top: 1rem;
   padding: 0.3rem 1.25rem;
   background-color: transparent;
@@ -188,11 +188,11 @@ ul > li {
   font-size: 0.8rem;
 }
 
-.close-button:hover {
+.modal-close-button:hover {
   outline: 1px solid var(--primary-color);
 }
 
-.close-x-button {
+.modal-close-x-button {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 0.5rem;
@@ -203,7 +203,7 @@ ul > li {
   font-size: 1rem;
 }
 
-.close-x-button:hover {
+.modal-close-x-button:hover {
   outline: 1px solid var(--primary-color);
 }
 
@@ -239,8 +239,11 @@ ul > li {
 }
 
 @media (max-width: 600px), (max-height: 600px) {
+  .container {
+    grid-gap: 0.5rem;
+  }
   .container > div {
-    font-size: min(7vw, 7vh);
+    font-size: 1rem;
   }
 }
 
