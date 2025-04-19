@@ -84,6 +84,10 @@ const createSquares = () => {
       square.innerHTML = _squares[i][j].value;
       square.setAttribute("onclick", `clicked(${i},${j})`);
 
+      square.addEventListener("touchend", (event) => {
+        touched(i, j);
+      });
+
       // Hide the last square (blank square)
       if (_squares[i][j].value === "") {
         square.style.visibility = "hidden";
@@ -134,6 +138,10 @@ const clicked = (i, j) => {
     _count++;
     render();
   }
+};
+
+const touched = (i, j) => {
+  clicked(i, j);
 };
 
 /*
@@ -442,7 +450,6 @@ const moveBlankSquareRight = (isShiftPressed) => {
 const showInfoModal = () => {
   infoModal.showModal();
   const closeButton = document.getElementById("modal-close-button");
-  closeButton.focus(); // a11y
 };
 
 const closeInfoModal = () => {
