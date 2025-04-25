@@ -2,10 +2,12 @@ let _size = 4;
 const _maxShuffleRunThreshold = 50;
 const _squares = new Array(_size);
 const _nextToSolveColor = "var(--next-to-solve-color)";
+const _laterToSolveColor = "var(--later-to-solve-color)";
 const _solvedColor = "var(--solved-color)";
 const _squareBackgroundColor = "var(--primary-color)";
 let _blankSquare = [];
 let _nextToBeSolvedId = null;
+let _laterToBeSolvedId = null;
 let _count = 0;
 let _success = false;
 
@@ -271,6 +273,11 @@ const render = () => {
     document.getElementById(_nextToBeSolvedId).style.color =
       _squareBackgroundColor;
   }
+  if (_laterToBeSolvedId != null) {
+    _squares[Math.floor((_laterToBeSolvedId - 1) / _size)][
+      (_laterToBeSolvedId - 1) % _size
+    ].isModified = true;
+  }
 
   for (let i = 0; i < _size; i++) {
     for (let j = 0; j < _size; j++) {
@@ -300,11 +307,22 @@ const render = () => {
   }
 
   if (maxSolvedValue < _size * _size - 1) {
-    const nexToBeSolved = _squares
+    const nextToBeSolved = _squares
       .find((row) => row.some((cell) => cell.value === maxSolvedValue + 1))
       .find((cell) => cell.value === maxSolvedValue + 1);
-    document.getElementById(nexToBeSolved.id).style.color = _nextToSolveColor;
-    _nextToBeSolvedId = nexToBeSolved.id;
+    document.getElementById(nextToBeSolved.id).style.color = _nextToSolveColor;
+    _nextToBeSolvedId = nextToBeSolved.id;
+  }
+
+  if (maxSolvedValue < _size * _size - 2) {
+    const laterToBeSolved = _squares
+      .find((row) => row.some((cell) => cell.value === maxSolvedValue + 2))
+      .find((cell) => cell.value === maxSolvedValue + 2);
+    document.getElementById(laterToBeSolved.id).style.color =
+      _laterToSolveColor;
+    _laterToBeSolvedId = laterToBeSolved.id;
+  } else {
+    _laterToBeSolvedId = null;
   }
 
   document.getElementById("count").innerHTML = _count === 0 ? "" : _count;
@@ -366,6 +384,7 @@ const reset = () => {
   resetLastSquare();
   _count = 0;
   _nextToBeSolvedId = null;
+  _laterToBeSolvedId = null;
 };
 
 const resetLastSquare = () => {
