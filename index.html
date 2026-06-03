@@ -451,6 +451,148 @@
           font-size: 1.3rem;
         }
       }
+
+      /* Victory Banner */
+      .victory-banner {
+        display: none;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--glow-color);
+        background: rgba(0, 255, 204, 0.1);
+        border: 1px solid var(--glow-color);
+        padding: 0.5rem 1.5rem;
+        border-radius: 20px;
+        margin-top: 0.6rem;
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        animation: slideDown 0.4s ease forwards;
+        text-align: center;
+      }
+      
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Floating History Button */
+      .history-button {
+        position: fixed;
+        top: max(20px, env(safe-area-inset-top));
+        right: max(20px, env(safe-area-inset-right));
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 50%;
+        background-color: rgba(20, 43, 43, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--primary-color);
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s ease;
+        z-index: 100;
+      }
+
+      .history-button:hover {
+        background-color: rgba(120, 169, 150, 0.2);
+        border-color: var(--glow-color);
+        color: var(--glow-color);
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
+        transform: scale(1.1);
+      }
+
+      .history-modal {
+        border: 1px solid var(--primary-color);
+        border-radius: 16px;
+        background: var(--body-background-color-2);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        padding: 0;
+        color: #c8c8c8;
+        max-width: 500px;
+        width: 90%;
+        overflow: hidden;
+      }
+
+      /* Filter Selector */
+      .history-filter-select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(120, 169, 150, 0.3);
+        color: #e6f0ed;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 1rem;
+        outline: none;
+        width: 100%;
+        margin-bottom: 1.2rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .history-filter-select:focus {
+        border-color: var(--glow-color);
+        box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+      }
+
+      /* Leaderboard / History table */
+      .history-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+      }
+      .history-table th, .history-table td {
+        padding: 0.75rem 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(120, 169, 150, 0.1);
+      }
+      .history-table th {
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .history-table tr:last-child td {
+        border-bottom: none;
+      }
+      .history-table .rank-col {
+        width: 15%;
+        font-weight: 800;
+        text-align: center;
+      }
+      .history-table .variant-col {
+        width: 20%;
+      }
+      .history-table .steps-col {
+        width: 25%;
+        font-weight: 700;
+        color: var(--glow-color);
+      }
+      .history-table .date-col {
+        width: 40%;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      
+      .rank-1 { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+      .rank-2 { color: #c0c0c0; text-shadow: 0 0 8px rgba(192, 192, 192, 0.4); }
+      .rank-3 { color: #cd7f32; text-shadow: 0 0 8px rgba(205, 127, 50, 0.4); }
+      .rank-other { color: var(--text-muted); }
+
+      .no-scores-message {
+        text-align: center;
+        padding: 2.5rem 1rem;
+        color: var(--text-muted);
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
@@ -470,8 +612,9 @@
       <!-- Gameplay Screen View -->
       <div id="game-screen" class="view">
         <header>
-          <div class="header">
+          <div class="header" style="flex-direction: column; gap: 0.2rem;">
             <span id="game-title" aria-label="Title">SlideRun</span>
+            <div id="victory-banner" class="victory-banner"></div>
           </div>
         </header>
         <main>
@@ -515,6 +658,19 @@
         onclick="showInfoModal()"
       >
         i
+      </button>
+      <button
+        id="history-button"
+        class="history-button"
+        aria-label="Open History Leaderboard"
+        title="History / Leaderboard"
+        onclick="showHistoryModal()"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
+          <path d="M12 7v5l4 2"/>
+        </svg>
       </button>
       <dialog id="info-modal" class="info-modal" role="dialog">
         <div class="modal-content">
@@ -574,6 +730,65 @@
           </button>
         </div>
       </dialog>
+      <dialog id="history-modal" class="history-modal info-modal" role="dialog">
+        <div class="modal-content">
+          <div class="modal-header-group">
+            <h3 class="modal-title" style="display: flex; align-items: center; gap: 0.5rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+                <path d="M12 7v5l4 2"/>
+              </svg>
+              Best Scores
+            </h3>
+            <button
+              class="modal-close-x-button"
+              aria-label="Close History Modal"
+              onclick="closeHistoryModal()"
+            >
+              &times;
+            </button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="filter-container" style="margin-bottom: 1rem; text-align: left;">
+              <label for="history-filter" style="display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--text-muted);">Grid Size:</label>
+              <select id="history-filter" class="history-filter-select" onchange="renderHistoryList()">
+                <option value="all">All Sizes</option>
+                <option value="2">2x2</option>
+                <option value="3">3x3</option>
+                <option value="4">4x4</option>
+                <option value="5">5x5</option>
+                <option value="6">6x6</option>
+                <option value="7">7x7</option>
+                <option value="8">8x8</option>
+                <option value="9">9x9</option>
+              </select>
+            </div>
+
+            <div id="history-list-container">
+              <!-- Dynamically populated scores list -->
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: center;">
+              <button
+                class="button-outline"
+                style="padding: 0.5rem 1.5rem; font-size: 0.95rem; flex-grow: 0;"
+                onclick="clearHistory()"
+              >
+                Clear History
+              </button>
+              <button
+                class="modal-close-button"
+                style="margin-top: 0; padding: 0.5rem 2rem; font-size: 0.95rem; align-self: auto;"
+                onclick="closeHistoryModal()"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </dialog>
 
     </div>
 
@@ -592,6 +807,7 @@
       let _success = false;
 
       let infoModal;
+      let historyModal;
 
       document.addEventListener("keydown", (event) => {
         if (_success) return;
@@ -633,6 +849,15 @@
           }
         });
 
+        historyModal = document.getElementById("history-modal");
+        
+        // Close the modal when the user clicks outside of it
+        historyModal.addEventListener("click", (event) => {
+          if (event.target === historyModal) {
+            historyModal.close();
+          }
+        });
+
         // Generate size buttons dynamically
         const sizeGrid = document.getElementById("size-grid");
         sizeGrid.innerHTML = "";
@@ -670,6 +895,8 @@
         document.getElementById("game-screen").classList.remove("active");
         document.getElementById("select-screen").classList.add("active");
         _success = false; // Reset game flags when going home
+        _count = 0;
+        document.getElementById("count").innerHTML = "";
 
         if (!preventPush) {
           history.pushState(null, "", window.location.pathname);
@@ -972,8 +1199,24 @@
       };
 
       const showSuccess = () => {
-        document.getElementById("status").textContent =
-          "Congrats! You solved the puzzle!";
+        const rank = saveScore(_size, _count);
+
+        let successMsg = `Congrats! Solved in ${_count} steps!`;
+        if (rank === 1) {
+          successMsg = `🏆 New Personal Best! (${_count} steps)`;
+        } else if (rank === 2) {
+          successMsg = `🥈 2nd Best Score! (${_count} steps)`;
+        } else if (rank === 3) {
+          successMsg = `🥉 3rd Best Score! (${_count} steps)`;
+        }
+
+        const victoryBanner = document.getElementById("victory-banner");
+        if (victoryBanner) {
+          victoryBanner.textContent = successMsg;
+          victoryBanner.style.display = "inline-block";
+        }
+
+        document.getElementById("status").textContent = successMsg;
         document.getElementById("status").focus();
 
         if (typeof confetti === "function") {
@@ -1025,6 +1268,11 @@
         _count = 0;
         _nextToBeSolvedId = null;
         _laterToBeSolvedId = null;
+
+        const victoryBanner = document.getElementById("victory-banner");
+        if (victoryBanner) {
+          victoryBanner.style.display = "none";
+        }
       };
 
       const resetLastSquare = () => {
@@ -1113,6 +1361,164 @@
       const closeInfoModal = () => {
         if (infoModal && typeof infoModal.close === "function") {
           infoModal.close();
+        }
+      };
+
+      const saveScore = (size, steps) => {
+        try {
+          const rawScores = localStorage.getItem("sliderun_scores");
+          const scores = rawScores ? JSON.parse(rawScores) : [];
+          const newScore = {
+            size: size,
+            steps: steps,
+            date: new Date().toISOString()
+          };
+          scores.push(newScore);
+          localStorage.setItem("sliderun_scores", JSON.stringify(scores));
+
+          // Calculate rank for this specific size
+          const sizeScores = scores.filter(s => s.size === size);
+          sizeScores.sort((a, b) => {
+            if (a.steps !== b.steps) {
+              return a.steps - b.steps;
+            }
+            return new Date(a.date) - new Date(b.date);
+          });
+
+          const rankIndex = sizeScores.findIndex(s => s.steps === steps && s.date === newScore.date);
+          return rankIndex !== -1 ? rankIndex + 1 : null;
+        } catch (e) {
+          console.error("Failed to save score to localStorage:", e);
+          return null;
+        }
+      };
+
+      const showHistoryModal = () => {
+        if (!historyModal) return;
+
+        // Auto-select current game size if inside an active game
+        const gameScreenActive = document.getElementById("game-screen").classList.contains("active");
+        const filterSelect = document.getElementById("history-filter");
+        
+        if (gameScreenActive) {
+          filterSelect.value = _size.toString();
+        } else {
+          filterSelect.value = "all";
+        }
+
+        renderHistoryList();
+
+        if (typeof historyModal.showModal === "function") {
+          historyModal.showModal();
+        }
+      };
+
+      const closeHistoryModal = () => {
+        if (historyModal && typeof historyModal.close === "function") {
+          historyModal.close();
+        }
+      };
+
+      const renderHistoryList = () => {
+        const filterSelect = document.getElementById("history-filter");
+        const listContainer = document.getElementById("history-list-container");
+        if (!filterSelect || !listContainer) return;
+
+        const filterValue = filterSelect.value;
+        let scores = [];
+        try {
+          const rawScores = localStorage.getItem("sliderun_scores");
+          scores = rawScores ? JSON.parse(rawScores) : [];
+        } catch (e) {
+          console.error("Failed to load scores from localStorage:", e);
+        }
+
+        // Filter scores
+        if (filterValue !== "all") {
+          const targetSize = parseInt(filterValue, 10);
+          scores = scores.filter(score => score.size === targetSize);
+        }
+
+        // Sort: least steps first, then newer date first
+        scores.sort((a, b) => {
+          if (a.steps !== b.steps) {
+            return a.steps - b.steps;
+          }
+          return new Date(b.date) - new Date(a.date);
+        });
+
+        // Top 10
+        const top10 = scores.slice(0, 10);
+
+        if (top10.length === 0) {
+          listContainer.innerHTML = `<div class="no-scores-message">No scores recorded yet. Solve a puzzle to make history!</div>`;
+          return;
+        }
+
+        const formatDate = (isoString) => {
+          try {
+            const date = new Date(isoString);
+            return date.toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+              year: "numeric"
+            });
+          } catch (e) {
+            return "Unknown";
+          }
+        };
+
+        let tableHtml = `
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th class="rank-col">Rank</th>
+                <th class="variant-col">Size</th>
+                <th class="steps-col">Steps</th>
+                <th class="date-col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        top10.forEach((score, index) => {
+          const rank = index + 1;
+          let rankClass = "rank-other";
+          if (rank === 1) rankClass = "rank-1";
+          else if (rank === 2) rankClass = "rank-2";
+          else if (rank === 3) rankClass = "rank-3";
+
+          let rankDisplay = `#${rank}`;
+          if (rank === 1) rankDisplay = "🏆";
+          else if (rank === 2) rankDisplay = "🥈";
+          else if (rank === 3) rankDisplay = "🥉";
+
+          tableHtml += `
+            <tr>
+              <td class="rank-col ${rankClass}">${rankDisplay}</td>
+              <td class="variant-col">${score.size}x${score.size}</td>
+              <td class="steps-col">${score.steps}</td>
+              <td class="date-col">${formatDate(score.date)}</td>
+            </tr>
+          `;
+        });
+
+        tableHtml += `
+            </tbody>
+          </table>
+        `;
+
+        listContainer.innerHTML = tableHtml;
+      };
+
+      const clearHistory = () => {
+        if (confirm("Are you sure you want to clear your entire score history? This cannot be undone.")) {
+          try {
+            localStorage.removeItem("sliderun_scores");
+            renderHistoryList();
+          } catch (e) {
+            console.error("Failed to clear localStorage:", e);
+          }
         }
       };
 
